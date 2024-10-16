@@ -4,7 +4,7 @@ Volem fer el joc Buscaminas en l'idioma de Python.
 
 Testing sobretot en el Model i Controlador. 
 
-EL nostre buscaminas sera molt complet, on tindrem per escollir 3 tipus de taulers, segons la dificultat. 
+El nostre buscaminas sera molt complet, on tindrem per escollir 3 tipus de taulers, segons la dificultat. 
 
 ### Nivells de dificultat:
 - **Nivell 1 - Principiant**: 10 × 10 caselles i 10 mines.
