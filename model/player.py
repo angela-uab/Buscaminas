@@ -9,7 +9,7 @@ class Player:
 
     def set_id(self, player_id):
         if not isinstance(player_id, int) or player_id < 0:
-            raise ValueError("ID must be a non-negative integer.")
+            raise ValueError("Player ID must be a non-negative integer.")
         self._id = player_id
 
     def get_name(self):
@@ -18,12 +18,12 @@ class Player:
     def set_name(self, name):
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Name must be a non-empty string.")
-        self._name = name.strip()
+        self._name = name
 
     def get_score(self):
         return self._score
 
     def set_score(self, score):
-        if not isinstance(score, int) or score < 0:
-            raise ValueError("Score must be a non-negative integer.")
+        if not isinstance(score, (int, float)) or score < 0:
+            raise ValueError("Score must be a non-negative number.")
         self._score = score
