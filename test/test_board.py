@@ -1,35 +1,58 @@
+import unittest
 from model.board import Board
 
-def test_create_empty_board():
-    rows, cols, mines = 5, 5, 0
-    board = Board(rows, cols, mines)
 
-    # Verifica que el tablero tiene las dimensiones correctas
-    assert len(board.board) == rows
-    assert len(board.board[0]) == cols
+class TestBoard(unittest.TestCase):
+    def test_board_initialization(self):
+        board = Board(1)
+        self.assertEqual(board.size, 6)
+        self.assertEqual(board.total_bombs, 8)
 
-    # Verifica que no hay minas en el tablero
-    for row in board.board:
-        assert all(cell == '.' for cell in row)
+        board = Board(2)
+        self.assertEqual(board.size, 8)
+        self.assertEqual(board.total_bombs, 16)
 
-def test_place_mines():
-    rows, cols, mines = 5, 5, 5
-    board = Board(rows, cols, mines)
+        board = Board(3)
+        self.assertEqual(board.size, 10)
+        self.assertEqual(board.total_bombs, 32)
 
-    # Verifica que hay exactamente 5 minas
-    mine_count = sum(row.count('M') for row in board.board)
-    assert mine_count == mines
+    def test_invalid_difficulty(self):
+        with self.assertRaises(ValueError):
+            Board(0)
+
+        with self.assertRaises(ValueError):
+            Board(4)
+
+    def test_bomb_counting(self):
+        board = Board(1)
+        total_bombs = sum(tile.is_bomb for row in board.tiles for tile in row)
+        self.assertEqual(total_bombs, board.total_bombs)
+
+    def test_reveal_tile(self):
+        board = Board(1)
+        board.reveal_tile(0, 0)
+        self.assertTrue(board.tiles[0][0].is_revealed)
+
+    def test_game_lost_condition(self):
+        board = Board(1)
+        for x in range(board.size):
+            for y in range(board.size):
+                if board.tiles[x][y].is_bomb:
+                    board.reveal_tile(x, y)  
+                    break
+        self.assertTrue(board.is_game_lost)
 
 
-def test_display_board(capsys):
-    rows, cols, mines = 5, 5, 0
-    board = Board(rows, cols, mines)
-    board.display_board()
+    def test_game_win_condition(self):
+        board = Board(1)
+        for row in board.tiles:
+            for tile in row:
+                if not tile.is_bomb:
+                    tile.reveal()
+        self.assertTrue(board.is_game_won())
 
-    captured = capsys.readouterr()
-    output = captured.out.strip().split("\n")
-    
-    # Verifica que cada línea del tablero tiene el número correcto de columnas
-    assert len(output) == rows
-    assert all(len(line.split()) == cols for line in output)
+
+if __name__ == "__main__":
+    unittest.main()
+
 
