@@ -23,6 +23,8 @@ def test_invalid_insert_player(test_db):
         test_db.insert_player(None, 10)  # Nombre None no permitido
     with pytest.raises(ValueError):
         test_db.insert_player("Alice", "invalid_score")  # Puntaje debe ser un número
+    with pytest.raises(ValueError):
+        test_db.insert_player("Alice", -1)  # Puntaje negativo no permitido
 
 # Statement Coverage: Verifica manejo de errores al buscar un jugador con ID inválido.
 def test_invalid_get_player_by_id(test_db):
@@ -31,6 +33,8 @@ def test_invalid_get_player_by_id(test_db):
     
     with pytest.raises(ValueError):
         test_db.get_player_by_id("invalid_id")  # ID no es un entero
+    player = test_db.get_player_by_id(999)  # ID inexistente
+    assert player is None
 
 # Statement Coverage: Verifica manejo de errores al eliminar un jugador con ID inválido.
 def test_invalid_delete_player(test_db):
@@ -39,6 +43,8 @@ def test_invalid_delete_player(test_db):
     
     with pytest.raises(ValueError):
         test_db.delete_player("invalid_id")  # ID no es un entero
+    result = test_db.delete_player(999)  # ID inexistente
+    assert result is True  # No afecta la base de datos
 
  # Path Coverage: Verifica la inserción de múltiples jugadores y su recuperación.
 def test_insert_two_players(test_db):
@@ -123,4 +129,5 @@ def test_get_top_players_limit_cases(test_db):
     assert top_players[0][1] == "Bob"
     assert top_players[1][1] == "Alice"
 
-
+if __name__ == "__main__":
+    pytest.main()

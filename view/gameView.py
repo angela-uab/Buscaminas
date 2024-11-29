@@ -13,11 +13,16 @@ class View:
 
     def display_difficulty_menu(self):
         """Muestra el menú de selección de dificultad."""
-        print("\nSelecciona la dificultad:")
-        print("1. Fácil (6x6, 8 bombas)")
-        print("2. Medio (8x8, 16 bombas)")
-        print("3. Difícil (10x10, 32 bombas)")
-        return int(input("Elige una opción (1-3): "))
+        while True:
+            try:
+                print("\nSelecciona la dificultad:")
+                print("1. Fácil (6x6, 8 bombas)")
+                print("2. Medio (8x8, 16 bombas)")
+                print("3. Difícil (10x10, 32 bombas)")
+                return int(input("Elige una opción (1-3): "))
+            except ValueError:
+                print("Opción no válida. Intenta de nuevo.")
+
 
     def display_board(self, board):
         """Muestra el tablero en consola."""

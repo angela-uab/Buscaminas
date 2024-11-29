@@ -19,10 +19,10 @@ class TestBoard(unittest.TestCase):
     
     # Prueba valores límite: Dificultades fuera de rango
     def test_invalid_difficulty(self):
-        with self.assertRaises(ValueError): # Frontera inferior
+        with self.assertRaises(ValueError):  # Frontera inferior
             Board(0)
 
-        with self.assertRaises(ValueError): # Frontera superior
+        with self.assertRaises(ValueError):  # Frontera superior
             Board(4)
 
     # Loop Testing: Verificar conteo de bombas
@@ -56,8 +56,36 @@ class TestBoard(unittest.TestCase):
                     tile.reveal()
         self.assertTrue(board.is_game_won())
 
+    # Pairwise Testing: Combinaciones posibles de tamaño y número de bombas
+    def test_pairwise_board_configurations(self):
+        configurations = [
+            (6, 8),   # Fácil
+            (8, 16),  # Medio
+            (10, 32), # Difícil
+        ]
+        for size, bombs in configurations:
+            board = Board(1)
+            board.size = size
+            board.total_bombs = bombs
+            self.assertEqual(board.size, size)
+            self.assertEqual(board.total_bombs, bombs)
+
+    # Valores Límite: Tablero pequeño y grande
+    def test_board_edge_sizes(self):
+        # Tablero mínimo
+        small_board = Board(1)
+        small_board.size = 2
+        small_board.total_bombs = 1
+        self.assertEqual(small_board.size, 2)
+        self.assertEqual(small_board.total_bombs, 1)
+
+        # Tablero grande
+        large_board = Board(1)
+        large_board.size = 50
+        large_board.total_bombs = 100
+        self.assertEqual(large_board.size, 50)
+        self.assertEqual(large_board.total_bombs, 100)
+
 
 if __name__ == "__main__":
     unittest.main()
-
-
