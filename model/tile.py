@@ -15,6 +15,10 @@ class Tile:
     @property
     def is_revealed(self):
         return self._is_revealed
+    
+    @is_revealed.setter
+    def is_revealed(self, value):
+        self._is_revealed = value
 
     def reveal(self):
         self._is_revealed = True

@@ -40,7 +40,12 @@ class GameController:
         while not board.is_game_won() and not board.is_game_lost:
             self.view.display_board(board)
             try:
-                x, y = self.view.get_coordinates(board.size)
+                '''input_data = input(f"Introduce las coordenadas (fila columna) [1-{board.size}]: ")
+                if input_data.lower() == "salir":
+                    print("¡Gracias por jugar!")
+                    break
+                x, y = map(int, input_data.split())'''
+                x, y = self.view.get_coordinates(board.size) 
                 # Revela la casilla seleccionada
                 is_bomb = board.tiles[x][y].is_bomb
                 board.reveal_tile(x, y)
