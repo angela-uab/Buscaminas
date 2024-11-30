@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from model.board import Board
 
 
@@ -34,8 +35,9 @@ class TestBoard(unittest.TestCase):
     # Path Coverage: Verificar revelado de casilla
     def test_reveal_tile(self):
         board = Board(1)
-        board.reveal_tile(0, 0)
+        success = board.reveal_tile(0, 0)
         self.assertTrue(board.tiles[0][0].is_revealed)
+        self.assertTrue(success)
 
     # Decision Coverage: Perder tras descubrir una bomba
     def test_game_lost_condition(self):
@@ -44,8 +46,8 @@ class TestBoard(unittest.TestCase):
             for y in range(board.size):
                 if board.tiles[x][y].is_bomb:
                     board.reveal_tile(x, y)  
-                    break
-        self.assertTrue(board.is_game_lost)
+                    self.assertTrue(board.is_game_lost)
+                    return
 
     # Loop Testing y Path Coverage: Ganar tras revelar todas las no-bombas
     def test_game_win_condition(self):
@@ -85,6 +87,35 @@ class TestBoard(unittest.TestCase):
         large_board.total_bombs = 100
         self.assertEqual(large_board.size, 50)
         self.assertEqual(large_board.total_bombs, 100)
+
+    def test_get_valid_coordinates(self):
+        board = Board(1)
+
+        def mock_input(prompt):
+            return "1 1"  
+
+        with patch("builtins.input", mock_input):
+            x, y = board.get_valid_coordinates()
+            self.assertEqual((x, y), (0, 0))  # Ajustado por índice basado en 0
+
+    def test_reveal_already_revealed_tile(self):
+        board = Board(1)
+        board.tiles[0][0].reveal() 
+        result = board.reveal_tile(0, 0)
+        self.assertFalse(result)  # Intentar revelar de nuevo debe devolver False
+
+    def test_bomb_count_within_bounds(self):
+        board = Board(1)
+        bomb_count = sum(tile.is_bomb for row in board.tiles for tile in row)
+        self.assertLessEqual(bomb_count, board.size * board.size)  # Bombas no deben exceder casillas totales
+    
+    def test_empty_board(self):
+        board = Board(1)
+        for row in board.tiles:
+            for tile in row:
+                tile.is_bomb = False
+                tile.reveal()  
+        self.assertTrue(board.is_game_won())  
 
 
 if __name__ == "__main__":

@@ -58,19 +58,42 @@ class Board:
         assert count >= 0, "El conteo de bombas vecinas no puede ser negativo."
         return count
 
-    def reveal_tile(self, x, y):
-        # Precondiciones: Coordenadas válidas y casilla no revelada
+    def reveal_tile(self, x, y):        
+        # Precondiciones: Coordenadas válidas
         assert 0 <= x < self.size, f"x está fuera de rango: {x}"
         assert 0 <= y < self.size, f"y está fuera de rango: {y}"
-        assert not self.tiles[x][y].is_revealed, "La casilla ya está revelada."
 
-        # Revelar casilla
+        # Comprobar si la casilla ya está revelada
+        if self.tiles[x][y].is_revealed:
+            print("La casilla ya está revelada. Por favor, selecciona otra.")
+            return False  # Indica que la casilla no se pudo revelar
+
         if self.tiles[x][y].is_bomb:
             self.is_game_lost = True
         self.tiles[x][y].reveal()
 
         # Postcondición: La casilla debe estar marcada como revelada
         assert self.tiles[x][y].is_revealed, "La casilla no se marcó como revelada correctamente."
+        return True  # Indica que la casilla se reveló con éxito
+
+    def get_valid_coordinates(self):
+        while True:
+            try:
+                input_data = input(f"Introduce las coordenadas (fila columna) [1-{self.size}]: ")
+                x, y = map(int, input_data.split())
+                x -= 1  # Ajustar a índice basado en 0
+                y -= 1  # Ajustar a índice basado en 0
+
+                if not (0 <= x < self.size and 0 <= y < self.size):
+                    print(f"Coordenadas fuera de rango. Introduce valores entre 1 y {self.size}.")
+                    continue
+
+                if not self.reveal_tile(x, y):  
+                    continue
+
+                return x, y  
+            except ValueError:
+                print("Entrada inválida. Introduce dos números separados por un espacio.")
 
     def is_game_won(self):
         # Verificar si todas las casillas no bomba están reveladas

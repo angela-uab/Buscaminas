@@ -23,13 +23,14 @@ class View:
             except ValueError:
                 print("Opción no válida. Intenta de nuevo.")
 
-
     def display_board(self, board):
-        """Muestra el tablero en consola."""
+        """Muestra el tablero en consola con alineación adecuada."""
+        # Encabezado con números de columna
         print("\n    " + " ".join([f"{col+1:2}" for col in range(board.size)]))
-        print("   " + "---" * board.size)
+        print("   " + "-" * (board.size * 3 + 1))  # Línea separadora
         for idx, row in enumerate(board.tiles):
-            print(f"{idx+1:2} | " + " ".join(tile.display() for tile in row))
+            # Fila con el número de fila y las casillas alineadas
+            print(f"{idx+1:2} | " + " ".join(f"{tile.display():2}" for tile in row))
         print()
 
     def get_coordinates(self, board_size):

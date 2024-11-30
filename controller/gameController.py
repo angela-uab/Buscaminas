@@ -75,15 +75,16 @@ class GameController:
 
                 # Revela la casilla seleccionada
                 is_bomb = board.tiles[x][y].is_bomb
-                board.reveal_tile(x, y)
+                successfully_revealed = board.reveal_tile(x, y)
 
                 # Postcondición: La casilla debe estar revelada.
-                assert board.tiles[x][y].is_revealed, "La casilla no se reveló correctamente."
+                if successfully_revealed:
+                    assert board.tiles[x][y].is_revealed, "La casilla no se reveló correctamente."
 
-                # Suma puntos si se descubre una bomba
-                if is_bomb:
-                    player.set_score(player.get_score() + 10)
-                    self.view.display_message("¡Has descubierto una bomba! +10 puntos.")
+                    # Suma puntos si se descubre una casilla sin bomba
+                    if not is_bomb:
+                        player.set_score(player.get_score() + 10)
+                        self.view.display_message("¡Has revelado una casilla segura! +10 puntos.")
             except (ValueError, IndexError):
                 self.view.display_message("Coordenadas inválidas. Intenta de nuevo.")
 
