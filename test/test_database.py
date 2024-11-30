@@ -40,11 +40,12 @@ def test_invalid_get_player_by_id(test_db):
 def test_invalid_delete_player(test_db):
     player_id = test_db.insert_player("Alice", 10)  # Insertamos un jugador válido
     assert player_id is not None, "El jugador no fue insertado correctamente."
-    
+
     with pytest.raises(ValueError):
         test_db.delete_player("invalid_id")  # ID no es un entero
     result = test_db.delete_player(999)  # ID inexistente
-    assert result is True  # No afecta la base de datos
+    assert result is False, "Se esperaba que no se eliminara ninguna fila para un ID inexistente."
+
 
  # Path Coverage: Verifica la inserción de múltiples jugadores y su recuperación.
 def test_insert_two_players(test_db):

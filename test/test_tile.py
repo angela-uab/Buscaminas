@@ -30,6 +30,8 @@ class TestTile(unittest.TestCase):
         tile.reveal()
         self.assertEqual(tile.display(), "0")  # Revelada sin bomba muestra 0
 
+        # Crear un nuevo tile o reiniciar el estado
+        tile = Tile()
         tile.is_bomb = True
         tile.reveal()
         self.assertEqual(tile.display(), "X")  # Revelada con bomba muestra X
