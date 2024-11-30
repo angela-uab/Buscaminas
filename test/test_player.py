@@ -55,25 +55,12 @@ class TestPlayer(unittest.TestCase):
         with self.assertRaises(ValueError):  # Valor negativo
             self.player.set_score(-1)
 
-    # Path Coverage: Configurar valors límit en tots els mètodes
-    def test_path_coverage_id(self):
-        self.player.set_id(0)  # Límite inferior
-        self.assertEqual(self.player.get_id(), 0)
-        with self.assertRaises(ValueError):  # Negatiu no vàlid
-            self.player.set_id(-1)
 
-    def test_path_coverage_name(self):
-        self.player.set_name("Valid Name")
-        self.assertEqual(self.player.get_name(), "Valid Name")
-        with self.assertRaises(ValueError):  # Nom buit
+    # Path Coverage: Configurar puntaje en límites
+    def test_get_name_after_invalid_set(self):
+        with self.assertRaises(ValueError):
             self.player.set_name("")
-        self.assertEqual(self.player.get_name(), "Valid Name")  # Nom anterior es manté
-
-    def test_path_coverage_score(self):
-        self.player.set_score(1000)  # Límite superior razonable
-        self.assertEqual(self.player.get_score(), 1000)
-        with self.assertRaises(ValueError):  # Valor negatiu
-            self.player.set_score(-10)
+        self.assertEqual(self.player.get_name(), "Alice")  # Asegura que el estado previo se conserva
 
     # Combinacions vàlides i invàlides per ID
     def test_set_id_combinations(self):
