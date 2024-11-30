@@ -114,17 +114,48 @@ class TestDatabaseManager(unittest.TestCase):
         self.assertEqual(top_players[1][1], "Charlie")  # Segunda mejor puntuación
 
     def test_get_top_players_limit_cases(self):
+        # Caso 1: Base de datos vacía
+        top_players = self.db.get_top_players(1)
+        self.assertEqual(len(top_players), 0)
+
+        # Caso 2: Límite igual a 0
+        with self.assertRaises(ValueError):  # Límite no puede ser 0
+            self.db.get_top_players(0)
+
+        # Caso 3: Límite mayor al número total de jugadores
         self.db.insert_player("Alice", 50)
         self.db.insert_player("Bob", 100)
+        top_players = self.db.get_top_players(10)  # Más de los jugadores registrados
+        self.assertEqual(len(top_players), 2)
+        self.assertEqual(top_players[0][1], "Bob")  # Mayor puntaje
+        self.assertEqual(top_players[1][1], "Alice")
 
-        top_players = self.db.get_top_players(1)
-        self.assertEqual(len(top_players), 1)
-        self.assertEqual(top_players[0][1], "Bob")  # Mejor puntaje
-
-        top_players = self.db.get_top_players(10)
+        # Caso 4: Límite igual al número total de jugadores
+        top_players = self.db.get_top_players(2)
         self.assertEqual(len(top_players), 2)
         self.assertEqual(top_players[0][1], "Bob")
         self.assertEqual(top_players[1][1], "Alice")
+
+        # Caso 5: Límite igual a 1
+        top_players = self.db.get_top_players(1)
+        self.assertEqual(len(top_players), 1)
+        self.assertEqual(top_players[0][1], "Bob")
+
+        # Caso 6: Base de datos con un único jugador
+        self.db = DatabaseManager()  # Reinicia la base de datos
+        self.db.insert_player("Charlie", 70)
+        top_players = self.db.get_top_players(1)
+        self.assertEqual(len(top_players), 1)
+        self.assertEqual(top_players[0][1], "Charlie")
+
+        # Caso 7: Base de datos con jugadores con puntuaciones iguales
+        self.db = DatabaseManager()  # Reinicia la base de datos
+        self.db.insert_player("Dan", 90)
+        self.db.insert_player("Eve", 90)
+        top_players = self.db.get_top_players(2)
+        self.assertEqual(len(top_players), 2)
+        self.assertIn(top_players[0][1], ["Dan", "Eve"])  # Ambos tienen el mismo puntaje
+        self.assertIn(top_players[1][1], ["Dan", "Eve"])
 
 
 if __name__ == "__main__":
