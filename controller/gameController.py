@@ -6,9 +6,6 @@ from view.gameView import View
 
 class GameController:
     def __init__(self):
-        """
-        Inicializa el controlador del juego con vista y base de datos.
-        """
         # Postcondición: La vista y la base de datos deben estar inicializadas.
         self.view = View()
         self.database = DatabaseManager("database.db")
@@ -16,9 +13,6 @@ class GameController:
         assert self.database is not None, "La base de datos no se inicializó correctamente."
 
     def run(self):
-        """
-        Controla el menú principal.
-        """
         # Invariante: La vista debe estar lista para interactuar.
         assert self.view is not None, "La vista no está inicializada."
         while True:
@@ -34,9 +28,6 @@ class GameController:
                 self.view.display_message("Opción no válida. Intenta de nuevo.")
 
     def start_game(self):
-        """
-        Inicia una partida.
-        """
         # Precondición: La vista debe estar inicializada para recibir datos del jugador.
         assert self.view is not None, "La vista no está inicializada."
         player_name = self.view.get_player_name()
@@ -56,9 +47,6 @@ class GameController:
             self.view.display_message("Dificultad no válida. Volviendo al menú principal...")
 
     def play_game(self, board, player):
-        """
-        Lógica principal del juego.
-        """
         # Precondiciones
         assert board is not None, "El tablero no está inicializado."
         assert player is not None, "El jugador no está inicializado."
@@ -100,9 +88,6 @@ class GameController:
             self.save_player_to_rankings(player)
 
     def save_player_to_rankings(self, player):
-        """
-        Guarda el jugador en la base de datos.
-        """
         # Precondición: El jugador debe tener un nombre y un puntaje válido.
         assert player.get_name(), "El jugador no tiene un nombre válido."
         assert player.get_score() >= 0, "El puntaje del jugador no es válido."
@@ -116,9 +101,6 @@ class GameController:
             self.view.display_message("Hubo un error al guardar tu puntaje en la base de datos.")
 
     def show_rankings(self):
-        """
-        Muestra los rankings desde la base de datos.
-        """
         # Invariante: La base de datos debe estar inicializada.
         assert self.database is not None, "La base de datos no está inicializada."
 

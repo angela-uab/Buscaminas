@@ -102,7 +102,7 @@ class TestDatabaseManager(unittest.TestCase):
         self.assertIsNotNone(player, f"No se encontró el jugador con ID {player_id} tras actualizar la puntuación.")
         self.assertEqual(player[2], 50)
 
-    # Partición Equivalente y Loop Testing: Verifica recuperación de los mejores puntajes.
+    # Partición Equivalente: Verifica recuperación de los mejores puntajes.
     def test_get_top_players(self):
         self.db.insert_player("Alice", 10)
         self.db.insert_player("Bob", 25)
